@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: webserver-daemonset
+spec:
+  selector:
+    matchLabels:
+      app: webserver-daemonset
+      tier: monitoring
+  template:
+    metadata:
+      labels:
+        app: webserver-daemonset
+        tier: monitoring
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/node-exporter
+          ports:
+            - containerPort: 80
