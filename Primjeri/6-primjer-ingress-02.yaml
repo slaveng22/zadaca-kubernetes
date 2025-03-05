@@ -1,0 +1,43 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: jabuka-app
+  labels:
+    app: jabuka
+spec:
+  containers:
+    - name: jabuka-container
+      image: hashicorp/http-echo
+      args:
+        - "-text=Hello from Jabuka!"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jabuka-service
+spec:
+  selector:
+    app: jabuka
+  ports:
+    - protocol: TCP
+      port: 5678
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jabuka-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /jabuka
+            pathType: Prefix
+            backend:
+              service:
+                name: jabuka-service
+                port:
+                  number: 5678
