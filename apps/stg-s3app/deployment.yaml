@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stg-s3app
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stg-s3app
+  template:
+    metadata:
+      labels:
+        app: stg-s3app
+      spec:
+        containers:
+          - name: stg-s3app
+            image: slaveng/s3-app
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 5000
+                protocol: TCP
